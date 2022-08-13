@@ -18,7 +18,7 @@ public class NetworkApp {
 
     String region = Util.getRegion(app);
 
-    //String sslCertificateArn = Util.getContextParameter(app, "sslCertificateArn");
+    // 'String sslCertificateArn = Util.getContextParameter(app, "sslCertificateArn");'
 
     Environment awsEnvironment = Util.makeEnv(accountId, region);
 
