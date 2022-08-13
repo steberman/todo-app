@@ -2,66 +2,47 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.myorg</groupId>
-    <artifactId>cdk</artifactId>
-    <version>0.1</version>
+
+
+
+  <groupId>dev.steberman.todoapp</groupId>
+  <artifactId>cdk-chapter-6</artifactId>
+  <version>0.1</version>
+  <description>CDK App for Chapter 6</description>
+
+    
 
     <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <cdk.version>2.35.0</cdk.version>
-        <constructs.version>[10.0.0,11.0.0)</constructs.version>
-        <stratospheric.constructs.version>0.1.11</stratospheric.constructs.version>
-        <junit.version>5.7.1</junit.version>
-    </properties>
+        <junit.version>5.8.2</junit.version>
+        <cdk-constructs.version>0.1.11</cdk-constructs.version>
+        <log4j2.version>2.18.0</log4j2.version>
+      </properties>
 
-    <build>
+      <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.0.0</version>
-                <configuration>
-                    <mainClass>com.myorg.CdkApp</mainClass>
-                </configuration>
-            </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.9.0</version>
+          </plugin>
         </plugins>
-    </build>
-
-    <dependencies>
-        <!-- AWS Cloud Development Kit -->
+      </build>
+    
+      <dependencies>
         <dependency>
-            <groupId>software.amazon.awscdk</groupId>
-            <artifactId>aws-cdk-lib</artifactId>
-            <version>${cdk.version}</version>
+          <groupId>dev.stratospheric</groupId>
+          <artifactId>cdk-constructs</artifactId>
+          <version>${cdk-constructs.version}</version>
         </dependency>
-
+    
         <dependency>
-            <groupId>software.constructs</groupId>
-            <artifactId>constructs</artifactId>
-            <version>${constructs.version}</version>
+          <groupId>org.junit.jupiter</groupId>
+          <artifactId>junit-jupiter-api</artifactId>
+          <version>${junit.version}</version>
+          <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>dev.stratospheric</groupId>
-            <artifactId>cdk-constructs</artifactId>
-            <version>${stratospheric.constructs.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+      </dependencies>
 </project>
