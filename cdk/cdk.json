@@ -6,6 +6,7 @@
     "springProfile": "aws",
     "environmentName": "staging",
     "sslCertificateArn": "arn:aws:acm:eu-central-1:049180574655:certificate/85d74edd-a6fc-493d-a1e8-14a33b0b24a6",
-    "dockerImageUrl": "docker.io/stratospheric/todo-app-v1:latest"
+    "dockerRepositoryName": "todo-app",
+    "dockerImageTag": "DYNAMICALLY_OVERRIDDEN_BY_WORKFLOW",
   }
 }
