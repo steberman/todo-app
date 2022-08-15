@@ -9,7 +9,7 @@
     "network:destroy": "cdk destroy --app \"./mvnw -e -q compile exec:java -Dexec.mainClass=dev.steberman.todoapp.cdk.NetworkApp\" --force --require-approval never",
     "repository:deploy": "cdk deploy --app \"./mvnw -e -q compile exec:java -Dexec.mainClass=dev.steberman.todoapp.cdk.DockerRepositoryApp\" --require-approval never",
     "repository:destroy": "cdk destroy --app \"./mvnw -e -q compile exec:java -Dexec.mainClass=dev.steberman.todoapp.cdk.DockerRepositoryApp\" --force --require-approval never",
-    "service:deploy": "cdk deploy --app \"./mvnw -e -q compile exec:java -Dexec.mainClass=dev.steberman.todoapp.cdk.ServiceApp\" --require-approval never",
+    "service:deploy": "cdk deploy --app \"./mvnw -e -q compile exec:java -Dexec.mainClass=dev.steberman.todoapp.cdk.ServiceApp\" --require-approval never --all",
     "service:destroy": "cdk destroy --app \"./mvnw -e -q compile exec:java -Dexec.mainClass=dev.steberman.todoapp.cdk.ServiceApp\" --force --require-approval never"
   },
   "devDependencies": {
