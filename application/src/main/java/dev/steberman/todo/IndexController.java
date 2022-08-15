@@ -12,7 +12,7 @@ public class IndexController {
   @GetMapping
   @RequestMapping("/")
   public String getIndex() {
-    return "This is steberman's todo-app.";
+    return "This is the revised steberman's todo-app.";
     
   }
 }
