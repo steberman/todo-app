@@ -12,6 +12,8 @@ import software.amazon.awscdk.App;
 import software.amazon.awscdk.Environment;
 import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
+import software.amazon.awscdk.services.iam.Effect;
+import software.amazon.awscdk.services.iam.PolicyStatement;
 import software.constructs.Construct;
 
 public class ServiceApp {
@@ -61,8 +63,8 @@ public class ServiceApp {
     // PostgresDatabase.DatabaseOutputParameters databaseOutputParameters =
     //   PostgresDatabase.getOutputParametersFromParameterStore(parametersStack, applicationEnvironment);
 
-    // CognitoStack.CognitoOutputParameters cognitoOutputParameters =
-    //   CognitoStack.getOutputParametersFromParameterStore(parametersStack, applicationEnvironment);
+     CognitoStack.CognitoOutputParameters cognitoOutputParameters =
+       CognitoStack.getOutputParametersFromParameterStore(parametersStack, applicationEnvironment);
 
     // MessagingStack.MessagingOutputParameters messagingOutputParameters =
     //   MessagingStack.getOutputParametersFromParameterStore(parametersStack, applicationEnvironment);
@@ -86,7 +88,7 @@ public class ServiceApp {
         environmentVariables(
           serviceStack,
           // databaseOutputParameters,
-          // cognitoOutputParameters,
+          cognitoOutputParameters,
           // messagingOutputParameters,
           // activeMqOutputParameters,
           springProfile,
@@ -110,16 +112,16 @@ public class ServiceApp {
           //     "sqs:GetQueueAttributes"))
           //   .build(),
 
-          // PolicyStatement.Builder.create()
-          //   .sid("AllowCreatingUsers")
-          //   .effect(Effect.ALLOW)
-          //   .resources(
-          //     List.of(String.format("arn:aws:cognito-idp:%s:%s:userpool/%s", region, accountId, cognitoOutputParameters.getUserPoolId()))
-          //   )
-          //   .actions(List.of(
-          //     "cognito-idp:AdminCreateUser"
-          //   ))
-          //   .build(),
+          PolicyStatement.Builder.create()
+            .sid("AllowCreatingUsers")
+            .effect(Effect.ALLOW)
+            .resources(
+              List.of(String.format("arn:aws:cognito-idp:%s:%s:userpool/%s", region, accountId, cognitoOutputParameters.getUserPoolId()))
+            )
+            .actions(List.of(
+              "cognito-idp:AdminCreateUser"
+            ))
+            .build()
 
           // PolicyStatement.Builder.create()
           //   .sid("AllowSendingEmails")
@@ -170,7 +172,7 @@ public class ServiceApp {
   static Map<String, String> environmentVariables(
     Construct scope,
     // PostgresDatabase.DatabaseOutputParameters databaseOutputParameters,
-    // CognitoStack.CognitoOutputParameters cognitoOutputParameters,
+    CognitoStack.CognitoOutputParameters cognitoOutputParameters,
     // MessagingStack.MessagingOutputParameters messagingOutputParameters,
     // ActiveMqStack.ActiveMqOutputParameters activeMqOutputParameters,
     String springProfile,
@@ -193,11 +195,12 @@ public class ServiceApp {
     // vars.put("SPRING_DATASOURCE_PASSWORD",
     //   databaseSecret.secretValueFromJson("password").toString());
 
-    // vars.put("COGNITO_CLIENT_ID", cognitoOutputParameters.getUserPoolClientId());
-    // vars.put("COGNITO_CLIENT_SECRET", cognitoOutputParameters.getUserPoolClientSecret());
-    // vars.put("COGNITO_USER_POOL_ID", cognitoOutputParameters.getUserPoolId());
-    // vars.put("COGNITO_LOGOUT_URL", cognitoOutputParameters.getLogoutUrl());
-    // vars.put("COGNITO_PROVIDER_URL", cognitoOutputParameters.getProviderUrl());
+    vars.put("COGNITO_CLIENT_ID", cognitoOutputParameters.getUserPoolClientId());
+    vars.put("COGNITO_CLIENT_SECRET", cognitoOutputParameters.getUserPoolClientSecret());
+    vars.put("COGNITO_USER_POOL_ID", cognitoOutputParameters.getUserPoolId());
+    vars.put("COGNITO_LOGOUT_URL", cognitoOutputParameters.getLogoutUrl());
+    vars.put("COGNITO_PROVIDER_URL", cognitoOutputParameters.getProviderUrl());
+
     // vars.put("TODO_SHARING_QUEUE_NAME", messagingOutputParameters.getTodoSharingQueueName());
     // vars.put("WEB_SOCKET_RELAY_ENDPOINT", activeMqOutputParameters.getStompEndpoint());
     // vars.put("WEB_SOCKET_RELAY_USERNAME", activeMqOutputParameters.getActiveMqUsername());
