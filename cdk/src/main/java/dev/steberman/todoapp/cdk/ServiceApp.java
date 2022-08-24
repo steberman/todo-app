@@ -7,6 +7,7 @@ import java.util.Map;
 
 import dev.stratospheric.cdk.ApplicationEnvironment;
 import dev.stratospheric.cdk.Network;
+import dev.stratospheric.cdk.PostgresDatabase;
 import dev.stratospheric.cdk.Service;
 import software.amazon.awscdk.App;
 import software.amazon.awscdk.Environment;
@@ -14,6 +15,8 @@ import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.services.iam.Effect;
 import software.amazon.awscdk.services.iam.PolicyStatement;
+import software.amazon.awscdk.services.secretsmanager.ISecret;
+import software.amazon.awscdk.services.secretsmanager.Secret;
 import software.constructs.Construct;
 
 public class ServiceApp {
@@ -60,8 +63,8 @@ public class ServiceApp {
       .env(awsEnvironment)
       .build());
 
-    // PostgresDatabase.DatabaseOutputParameters databaseOutputParameters =
-    //   PostgresDatabase.getOutputParametersFromParameterStore(parametersStack, applicationEnvironment);
+    PostgresDatabase.DatabaseOutputParameters databaseOutputParameters =
+      PostgresDatabase.getOutputParametersFromParameterStore(parametersStack, applicationEnvironment);
 
      CognitoStack.CognitoOutputParameters cognitoOutputParameters =
        CognitoStack.getOutputParametersFromParameterStore(parametersStack, applicationEnvironment);
@@ -87,7 +90,7 @@ public class ServiceApp {
         Collections.emptyList(), // securityGroupIdsToGrantIngressFromEcs,
         environmentVariables(
           serviceStack,
-          // databaseOutputParameters,
+          databaseOutputParameters,
           cognitoOutputParameters,
           // messagingOutputParameters,
           // activeMqOutputParameters,
@@ -171,7 +174,7 @@ public class ServiceApp {
 
   static Map<String, String> environmentVariables(
     Construct scope,
-    // PostgresDatabase.DatabaseOutputParameters databaseOutputParameters,
+    PostgresDatabase.DatabaseOutputParameters databaseOutputParameters,
     CognitoStack.CognitoOutputParameters cognitoOutputParameters,
     // MessagingStack.MessagingOutputParameters messagingOutputParameters,
     // ActiveMqStack.ActiveMqOutputParameters activeMqOutputParameters,
@@ -180,20 +183,20 @@ public class ServiceApp {
   ) {
     Map<String, String> vars = new HashMap<>();
 
-    // String databaseSecretArn = databaseOutputParameters.getDatabaseSecretArn();
-    // ISecret databaseSecret = Secret.fromSecretCompleteArn(scope, "databaseSecret", databaseSecretArn);
+    String databaseSecretArn = databaseOutputParameters.getDatabaseSecretArn();
+    ISecret databaseSecret = Secret.fromSecretCompleteArn(scope, "databaseSecret", databaseSecretArn);
 
     vars.put("SPRING_PROFILES_ACTIVE", springProfile);
 
-    // vars.put("SPRING_DATASOURCE_URL",
-    //   String.format("jdbc:postgresql://%s:%s/%s",
-    //     databaseOutputParameters.getEndpointAddress(),
-    //     databaseOutputParameters.getEndpointPort(),
-    //     databaseOutputParameters.getDbName()));
-    // vars.put("SPRING_DATASOURCE_USERNAME",
-    //   databaseSecret.secretValueFromJson("username").toString());
-    // vars.put("SPRING_DATASOURCE_PASSWORD",
-    //   databaseSecret.secretValueFromJson("password").toString());
+    vars.put("SPRING_DATASOURCE_URL",
+      String.format("jdbc:postgresql://%s:%s/%s",
+        databaseOutputParameters.getEndpointAddress(),
+        databaseOutputParameters.getEndpointPort(),
+        databaseOutputParameters.getDbName()));
+    vars.put("SPRING_DATASOURCE_USERNAME",
+      databaseSecret.secretValueFromJson("username").toString());
+    vars.put("SPRING_DATASOURCE_PASSWORD",
+      databaseSecret.secretValueFromJson("password").toString());
 
     vars.put("COGNITO_CLIENT_ID", cognitoOutputParameters.getUserPoolClientId());
     vars.put("COGNITO_CLIENT_SECRET", cognitoOutputParameters.getUserPoolClientSecret());

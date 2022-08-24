@@ -38,29 +38,29 @@ jobs:
   #       working-directory: cdk
   #       run: npm run messaging:deploy -- -c environmentName=${{ github.event.inputs.environmentName }}
 
-  # deploy-database-stack:
-  #   if: github.ref == 'refs/heads/main'
-  #   runs-on: ubuntu-20.04
-  #   name: Deploy the database stack
-  #   steps:
+  deploy-database-stack:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-20.04
+    name: Deploy the database stack
+    steps:
 
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-  #     - name: Set up JDK 17
-  #       uses: actions/setup-java@v2
-  #       with:
-  #         distribution: 'temurin'
-  #         java-version: 17
-  #         cache: 'maven'
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: 17
+          cache: 'maven'
 
-  #     - name: NPM install
-  #       working-directory: cdk
-  #       run: npm install
+      - name: NPM install
+        working-directory: cdk
+        run: npm install
 
-  #     - name: Deploy database stack
-  #       working-directory: cdk
-  #       run: npm run database:deploy -- -c environmentName=${{ github.event.inputs.environmentName }}
+      - name: Deploy database stack
+        working-directory: cdk
+        run: npm run database:deploy -- -c environmentName=${{ github.event.inputs.environmentName }}
 
   deploy-cognito-stack:
     if: github.ref == 'refs/heads/main'
