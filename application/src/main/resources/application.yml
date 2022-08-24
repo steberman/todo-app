@@ -1,0 +1,15 @@
+cloud:
+  aws:
+    stack:
+      auto: false
+    region:
+      static: eu-central-1
+    instance:
+      data:
+        enabled: false
+
+server:
+  forward-headers-strategy: framework
+
+custom:
+  invitation-codes: DUKE, STRATOSPHERIC
