@@ -1,5 +1,7 @@
 package dev.steberman.todo.config;
 
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
+import org.springframework.boot.actuate.health.HealthEndpoint;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,10 +22,15 @@ public class WebSecurityConfig {
   public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
     httpSecurity
         .csrf()
+        .ignoringAntMatchers(
+          "/stratospheric-todo-updates/**",
+          "/websocket/**"
+        )
         .and()
         .oauth2Login()
         .and()
         .authorizeRequests()
+        .requestMatchers(EndpointRequest.to(HealthEndpoint.class)).permitAll()
         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
         .mvcMatchers("/", "/health", "/register").permitAll()
         .anyRequest().authenticated()
